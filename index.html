@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Random-docs by loudej</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Random-docs</h1>
+        <p class="header"></p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/loudej/random-docs/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/loudej/random-docs/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/loudej/random-docs">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/loudej">loudej</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a name="title" class="anchor" href="#title"><span class="octicon octicon-link"></span></a>Title</h1>
+
+<p>This is a test</p>
+
+<pre><code>title Challenge a named auth type
+
+A-&gt;+B: next(env)
+
+
+B-&gt;+C: next(env)
+note over C
+env["StatusCode"] = 401
+env["Challenge"] += "B"
+end note
+C--&gt;-B: complete
+
+note over B
+if 401 &amp;&amp; any env["Challenge"] == "B"?
+-  env["StatusCode"] = 302
+-  env["Location"] = "/login"
+end note
+
+B--&gt;-A: complete
+</code></pre>
+
+<pre><code>title Challenge to any active
+
+A-&gt;+B: next(env)
+
+
+B-&gt;+C: next(env)
+note over C
+env["StatusCode"] = 401
+end note
+C--&gt;-B: complete
+
+note over B
+if 401 &amp;&amp; env["Challenge"] empty &amp;&amp; options.Mode == Active?
+-  env["StatusCode"] = 302
+-  env["Location"] = "/login"
+end note
+
+B--&gt;-A: complete
+</code></pre>
+
+<pre><code>title SignIn
+
+A-&gt;+B: next(env)
+
+
+B-&gt;+C: next(env)
+note over C
+identity = new ClaimsIdentity("B", claims)
+env["SignIn"] = new ClaimsPrincipal(identity)
+end note
+C--&gt;-B: complete
+
+note over B
+foreach env["SignIn"].Identities
+if identity.AuthenticationType == "B"?
+-  tokenize identity
+-  set-cookie
+end note
+
+B--&gt;-A: complete
+</code></pre>
+
+<pre><code>title SignOut, active or passive
+
+A-&gt;+B: next(env)
+
+
+B-&gt;+C: next(env)
+note over C
+env["SignOut"] += "B"
+end note
+C--&gt;-B: complete
+
+note over B
+if any env["SignOut"] == "B"?
+-  set-cookie "", expired
+end note
+
+B--&gt;-A: complete
+</code></pre>
+
+<pre><code>title Authentice, active
+
+A-&gt;+B: next(env)
+
+note over B
+identity = this.AuthenticateAsync()
+if identity?
+- request.User += identity
+end note
+
+B-&gt;+C: next(env)
+note over C
+examines request.User
+end note
+C--&gt;-B: complete
+
+B--&gt;-A: complete
+</code></pre>
+
+<pre><code>title Authentice, passive
+
+A-&gt;+B: next(env)
+
+B-&gt;+C: next(env)
+
+note over C
+needs identity from "B"
+AuthenticateAsync = (func)env["AuthAsync"]
+end note
+
+C-&gt;+B: AuthenticateAsync("B", callback)
+
+note over B
+if types contains "B"?
+- identity = this.AuthenticateAsync()
+- callback(identity)
+end note
+
+B-&gt;+C: callback(identity)
+
+note over C
+receives identity
+end note
+
+C--&gt;-B: 
+
+B--&gt;-C: complete
+
+note over C
+now has identity
+end note
+
+C--&gt;-B: complete
+
+B--&gt;-A: complete
+</code></pre>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
